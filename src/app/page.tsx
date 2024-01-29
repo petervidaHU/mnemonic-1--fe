@@ -1,3 +1,4 @@
+import MnemoResponse from "@/components/MnemoResponse";
 import Image from "next/image";
 
 export default function Home() {
@@ -8,10 +9,11 @@ export default function Home() {
           MneMaker
         </h1>
         <input
-          className="mt-8 border-4 rounded-2xl border-green-500 p-4 font-bevan text-xl w-1/3 text-center tracking-wide"
+          className="mt-8 border-4 rounded-2xl border-green-500 p-4 font-bevan text-xl w-full md:w-1/3 text-center tracking-wide"
           type="text"
           placeholder="Enter the stubborn acronym !!"
         />
+      <MnemoResponse />
       </div>
     </main>
 
