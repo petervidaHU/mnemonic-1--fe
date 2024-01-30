@@ -1,26 +1,31 @@
 'use client';
-import { useCreateMnemoMutation } from '@/store/apiSlice';
+import { useLazyCreateMnemoQuery } from '@/store/apiSlice';
 import React, { useState } from 'react'
 
+const sanitizeInput = (i: string) => {
+  return i.trim()
+}
+
 const Input = () => {
-  const [fetchMnemo, { data, error, isLoading }] = useCreateMnemoMutation();
+  const [fetchMnemo, { data, error, isLoading }] = useLazyCreateMnemoQuery();
   const [input, setInput] = useState("");
   const [holdMyHand, setHoldMyHand] = useState('');
 
   const handleSubmit = (e: { preventDefault: () => void; }) => {
     e.preventDefault();
+    const sanitizedInput = sanitizeInput(input)
 
-    if (input.length < 3) {
+    if (sanitizedInput.length < 3) {
       setHoldMyHand('Come on... you could learn a 2 letter acronym, try it harder....')
       return;
     }
-    if (input.length > 7) {
+    if (sanitizedInput.length > 7) {
       setHoldMyHand('Whatta... An acronym more than 7 char long? I give up, and you should do the same! Run!!!')
       return;
     }
 
     setHoldMyHand('')
-    fetchMnemo([...input.split('')]);
+    fetchMnemo(sanitizedInput);
   }
 
   return (<>
