@@ -1,8 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { IRootState } from './store';
 
+interface ResponseObject {
+  id: string,
+  text: Array<string>,
+}
+
 interface MyDataState {
-  data: Array<any>;
+  data: Array<ResponseObject>;
 }
 
 const initialState: MyDataState = { data: [] }

@@ -18,7 +18,7 @@ const Input = () => {
     if (data) {
       console.log('data i', data)
       dispatch(setMnemonics(data));
-      setInput('');
+      // setInput('');
     }
   }, [data])
 
