@@ -4,15 +4,12 @@ export const apiSlice = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:3010' }),
   endpoints: (builder) => ({
-    createMnemo: builder.mutation({
-      query: (characters) => ({
-        url: '/mnemo',
-        method: 'POST',
-        body: {characters},
-      }),
+    createMnemo: builder.query({
+      query: (characters) => ({url: `/mnemo/create/${characters}`}),
     }),
   }),
 })
 
-export const { useCreateMnemoMutation } = apiSlice;
+export const { useLazyCreateMnemoQuery } = apiSlice;
+
 export default  apiSlice.reducer;
