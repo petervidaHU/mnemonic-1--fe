@@ -1,15 +1,26 @@
 'use client';
+import React, { useState, useEffect } from 'react'
+import { useDispatch } from 'react-redux';
 import { useLazyCreateMnemoQuery } from '@/store/apiSlice';
-import React, { useState } from 'react'
+import { setMnemonics } from '@/store/mnemonicsSlice';
 
 const sanitizeInput = (i: string) => {
   return i.trim()
 }
 
 const Input = () => {
+  const dispatch = useDispatch()
   const [fetchMnemo, { data, error, isLoading }] = useLazyCreateMnemoQuery();
   const [input, setInput] = useState("");
   const [holdMyHand, setHoldMyHand] = useState('');
+
+  useEffect(() => {
+    if (data) {
+      console.log('data i', data)
+      dispatch(setMnemonics(data));
+      setInput('');
+    }
+  }, [data])
 
   const handleSubmit = (e: { preventDefault: () => void; }) => {
     e.preventDefault();
