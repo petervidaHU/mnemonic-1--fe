@@ -2,6 +2,7 @@
 import { getMnemonics } from '@/store/mnemonicsSlice'
 import React from 'react'
 import { useSelector } from 'react-redux'
+import TableActions from './TableActions'
 
 const MnemoResponse = () => {
   const mnemonicsData = useSelector(getMnemonics)
@@ -11,14 +12,17 @@ const MnemoResponse = () => {
       mnemonicsData.length > 0 && (
         <table className="w-full md:w-1/2 mt-16 font-bevan text-4xl text-center text-gray-700">
           <tbody>
-            {mnemonicsData.map(mnemo => {
-              const mnemoText = mnemo.text.join(' ');
+            {mnemonicsData.map(({text, id, status}) => {
               return (
                 <tr
-                  key={mnemo.id}
+                  key={id}
                   className="border-b-2 hover:text-green-500"
                 >
-                  <td className="px-8 py-4">{mnemoText}</td>
+                  <td className="px-8 py-4">
+                    {text}
+                    {' '}
+                    <TableActions id={id} status={status}/>
+                    </td>
                 </tr>
               )
             })

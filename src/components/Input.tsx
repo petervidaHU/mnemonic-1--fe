@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux';
 import { useLazyCreateMnemoQuery } from '@/store/apiSlice';
-import { setMnemonics } from '@/store/mnemonicsSlice';
+import { initMnemonics } from '@/store/mnemonicsSlice';
 
 const sanitizeInput = (i: string) => {
   return i.trim()
@@ -16,11 +16,10 @@ const Input = () => {
 
   useEffect(() => {
     if (data) {
-      console.log('data i', data)
-      dispatch(setMnemonics(data));
-      // setInput('');
+      const dataWithStatus = data.map((d: any) => ({...d, status: null}))
+      dispatch(initMnemonics(dataWithStatus));
     }
-  }, [data])
+  }, [dispatch, data])
 
   const handleSubmit = (e: { preventDefault: () => void; }) => {
     e.preventDefault();
