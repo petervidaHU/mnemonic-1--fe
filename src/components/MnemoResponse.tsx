@@ -5,14 +5,14 @@ import { useSelector } from 'react-redux'
 import TableActions from './TableActions'
 
 const MnemoResponse = () => {
-  const mnemonicsData = useSelector(getMnemonics)
-  console.log('mnemonicsdata in table: ', mnemonicsData)
+  const { data, acronym } = useSelector(getMnemonics)
+  console.log('mnemonicsdata in table: ', data)
   return (<>
     {
-      mnemonicsData.length > 0 && (
-        <table className="w-full md:w-1/2 mt-16 font-bevan text-4xl text-center text-gray-700">
+      data.length > 0 && (
+        <table className="w-full md:w-1/2 lg:w-2/3 mt-16 font-bevan text-4xl text-center text-gray-700">
           <tbody>
-            {mnemonicsData.map(({text, id, status}) => {
+            {data.map(({text, id, status}) => {
               return (
                 <tr
                   key={id}
@@ -30,7 +30,8 @@ const MnemoResponse = () => {
           </tbody>
         </table>
       )
-    }
+    } 
+    {acronym && data.length === 0 && (<div>uhm... sorry no mnemonics created. It is a hard stuff...</div>)}
   </>)
 }
 

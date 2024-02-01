@@ -15,16 +15,21 @@ interface ResponseObject {
 
 interface MyDataState {
   data: Array<ResponseObject>;
+  acronym: string | null
 }
 
-const initialState: MyDataState = { data: [] }
+const initialState: MyDataState = { 
+  data: [],
+  acronym: null,
+}
 
 const mnemonicsSlice = createSlice({
   name: 'mnemonics',
   initialState,
   reducers: {
     initMnemonics: (state, action) => {
-      state.data = action.payload;
+      state.data = action.payload.data;
+      state.acronym = action.payload.acronym;
     },
     updateMnemonics: (state, action) => {
       const { id, status } = action.payload;
@@ -41,6 +46,6 @@ const mnemonicsSlice = createSlice({
 });
 
 export const { initMnemonics, updateMnemonics } = mnemonicsSlice.actions;
-export const getMnemonics = (state: IRootState) => state.mnemonics.data; 
+export const getMnemonics = (state: IRootState) => state.mnemonics; 
 
 export default mnemonicsSlice.reducer;

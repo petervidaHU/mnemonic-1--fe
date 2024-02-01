@@ -14,6 +14,11 @@ interface Props {
   status: StatusOfResponse | null,
 }
 
+const s = {
+  hoverIcon: "hover:scale-125 hover:-rotate-6 transform transition-all duration-200",
+  noState: "h-6 w-6 hover:text-gray-600 text-gray-300 ml-4 mr-4",
+}
+
 const TableActions: FC<Props> = ({ id, status }) => {
   const dispatch = useDispatch();
 
@@ -21,42 +26,38 @@ const TableActions: FC<Props> = ({ id, status }) => {
     dispatch(updateMnemonics({ id, status }))
   };
 
-  const handleFavChange = () => {
-    dispatch(updateMnemonics({ id, status }))
-  };
-
   return (
     <span>
       <button
-        className="hover:scale-125 hover:-rotate-6 transform transition-all duration-200"
+        className={s.hoverIcon}
         onClick={() => handleStatusChange(StatusOfResponse.liked)}
       >
         {status === StatusOfResponse.liked ? (
-          <HandUpSolid className="h-6 w-6 text-green-600  ml-4 mr-4" />
+          <HandUpSolid className="h-6 w-6 text-pink-400 ml-4 mr-4" />
         ) : (
-          <HandThumbUpIcon className="h-6 w-6 text-gray-600 ml-4 mr-4" />
+          <HandThumbUpIcon className={s.noState} />
         )}
       </button>
 
       <button
-        className="hover:scale-125 hover:-rotate-6 transform transition-all duration-200"
+        className={s.hoverIcon}
         onClick={() => handleStatusChange(StatusOfResponse.disliked)}
       >
         {status === StatusOfResponse.disliked ? (
-          <HandDownSolid className="h-6 w-6 text-red-600  ml-4 mr-4" />
+          <HandDownSolid className="h-6 w-6 text-gray-700 ml-4 mr-4" />
         ) : (
-          <HandThumbDownIcon className="h-6 w-6 text-gray-600 ml-4 mr-4" />
+          <HandThumbDownIcon className={s.noState} />
         )}
       </button>
 
       <button
-        className="hover:scale-125 hover:-rotate-6 transform transition-all duration-200"
+        className={s.hoverIcon}
         onClick={() => handleStatusChange(StatusOfResponse.fav)}
       >
         {status === StatusOfResponse.fav ? (
-          <HeartSolid className="h-6 w-6 text-purple-800  ml-4 mr-4" />
+          <HeartSolid className="h-6 w-6 text-purple-600 ml-4 mr-4" />
         ) : (
-          <HeartIcon className="h-6 w-6 text-gray-600 ml-4 mr-4" />
+          <HeartIcon className={s.noState} />
         )}
       </button>
     </span >

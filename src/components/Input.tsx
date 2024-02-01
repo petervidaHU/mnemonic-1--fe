@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect } from 'react'
+import React, { FC, useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux';
 import { useLazyCreateMnemoQuery } from '@/store/apiSlice';
 import { initMnemonics } from '@/store/mnemonicsSlice';
@@ -8,7 +8,7 @@ const sanitizeInput = (i: string) => {
   return i.trim()
 }
 
-const Input = () => {
+const Input: FC = () => {
   const dispatch = useDispatch()
   const [fetchMnemo, { data, error, isLoading }] = useLazyCreateMnemoQuery();
   const [input, setInput] = useState("");
@@ -16,26 +16,30 @@ const Input = () => {
 
   useEffect(() => {
     if (data) {
-      const dataWithStatus = data.map((d: any) => ({...d, status: null}))
-      dispatch(initMnemonics(dataWithStatus));
+      const dataWithStatus = data.data.map((d: any) => ({ ...d, status: null }))
+      dispatch(initMnemonics({data: dataWithStatus, acronyms: data.acronyms}));
     }
   }, [dispatch, data])
 
+  const handleChange = (e: { target: { value: string; }; }) => {
+    const sanitizedInput = sanitizeInput(e.target.value)
+    setInput(sanitizedInput)
+    if (e.target.value.length > 2 && e.target.value.length < 7) {
+      setHoldMyHand('')
+    }
+  }
+
   const handleSubmit = (e: { preventDefault: () => void; }) => {
     e.preventDefault();
-    const sanitizedInput = sanitizeInput(input)
-
-    if (sanitizedInput.length < 3) {
+    if (input.length < 3) {
       setHoldMyHand('Come on... you could learn a 2 letter acronym, try it harder....')
       return;
     }
-    if (sanitizedInput.length > 7) {
+    if (input.length > 7) {
       setHoldMyHand('Whatta... An acronym more than 7 char long? I give up, and you should do the same! Run!!!')
       return;
     }
-
-    setHoldMyHand('')
-    fetchMnemo(sanitizedInput);
+    fetchMnemo(input);
   }
 
   return (<>
@@ -44,17 +48,18 @@ const Input = () => {
       type="text"
       placeholder="Enter the stubborn acronym !!"
       value={input}
-      onChange={(e) => setInput(e.target.value)}
+      onChange={handleChange}
     />
     <button
       className="mt-8 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full"
       onClick={handleSubmit}
     >
-      Submit
+      Get some idea
     </button>
+    {isLoading && (<div>Loading...</div>)}
+    {error && (<div>there is an error: {JSON.stringify(error)}</div>)}
     <div>{holdMyHand}</div>
   </>
-
   )
 }
 
