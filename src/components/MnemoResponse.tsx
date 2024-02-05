@@ -1,37 +1,57 @@
 'use client'
-import { getMnemonics } from '@/store/mnemonicsSlice'
 import React from 'react'
 import { useSelector } from 'react-redux'
+import { StatusOfResponse, getMnemonics } from '@/store/mnemonicsSlice'
 import TableActions from './TableActions'
+import Button from '@/components/ui/Button'
 
 const MnemoResponse = () => {
-  const { data, acronym } = useSelector(getMnemonics)
+  const { data, acronyms } = useSelector(getMnemonics)
+  console.log('mnemonicsdata in table: ', acronyms)
   console.log('mnemonicsdata in table: ', data)
+
+  const favSelected = data.find(mnemo => mnemo.status === StatusOfResponse.fav);
+  const allEvaulated = data.every(mnemo => mnemo.status);
+
   return (<>
     {
       data.length > 0 && (
-        <table className="w-full md:w-1/2 lg:w-2/3 mt-16 font-bevan text-4xl text-center text-gray-700">
-          <tbody>
-            {data.map(({text, id, status}) => {
-              return (
-                <tr
-                  key={id}
-                  className="border-b-2 hover:text-green-500"
-                >
-                  <td className="px-8 py-4">
-                    {text}
-                    {' '}
-                    <TableActions id={id} status={status}/>
+        <>
+          <table className="w-full md:w-1/2 lg:w-2/3 mt-4 font-bevan text-4xl text-center text-gray-700">
+            <tbody>
+              {data.map(({ text, id, status }) => {
+                return (
+                  <tr
+                    key={id}
+                    className="border-b-2 hover:text-gray-500"
+                  >
+                    <td className="px-8 py-4">
+                      {text}
+                      {' '}
+                      <TableActions id={id} status={status} />
                     </td>
-                </tr>
-              )
-            })
+                  </tr>
+                )
+              })
+              }
+            </tbody>
+          </table>
+          <p className={`w-full md:w-1/2 lg:w-2/3 mt-16 font-bevan text-xl text-center ${allEvaulated && favSelected ? 'text-gray-400' : 'text-green-500'} `}>
+            Please evaulate ALL the responses. You can choose only one favorite
+          </p>
+          <Button
+            variant={allEvaulated && favSelected ? 'primary' : 'disabled'}
+            onclickhandler={() => {
+              console.log('ok')
             }
-          </tbody>
-        </table>
+            }
+          >
+            I am ok
+          </Button>
+        </>
       )
-    } 
-    {acronym && data.length === 0 && (<div>uhm... sorry no mnemonics created. It is a hard stuff...</div>)}
+    }
+    {acronyms && data.length === 0 && (<div>uhm... sorry no mnemonics created. It is a hard stuff...</div>)}
   </>)
 }
 
