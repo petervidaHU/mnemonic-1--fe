@@ -7,18 +7,18 @@ export enum StatusOfResponse {
   fav = 'fav',
 }
 
-interface ResponseObject {
+export interface MnemonicObject {
   id: string,
   status: StatusOfResponse | null,
   text: Array<string>,
 }
 
-interface MyDataState {
-  data: Array<ResponseObject>;
+export interface ResponseObj {
+  data: Array<MnemonicObject>;
   acronyms: string | null
 }
 
-const initialState: MyDataState = { 
+const initialState: ResponseObj = { 
   data: [],
   acronyms: null,
 }

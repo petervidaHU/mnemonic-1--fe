@@ -11,19 +11,10 @@ const sanitizeInput = (i: string) => {
 
 const Input: FC = () => {
   const dispatch = useDispatch()
-  const [data, setData] = useState<any | null>(null);
   const [error, setError] = useState<any | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [input, setInput] = useState("");
   const [holdMyHand, setHoldMyHand] = useState('');
-
-  useEffect(() => {
-    if (data) {
-      console.log('incoming data from query: ', data);
-      const dataWithStatus = data.data.map((d: any) => ({ ...d, status: null }))
-      dispatch(initMnemonics({ data: dataWithStatus, acronyms: data.acronyms }));
-    }
-  }, [dispatch, data])
 
   const handleChange = (e: { target: { value: string; }; }) => {
     const sanitizedInput = sanitizeInput(e.target.value)
@@ -46,17 +37,17 @@ const Input: FC = () => {
     }
     try {
       setIsLoading(true);
+      setHoldMyHand('');
       const newMnemos = await getMnemos(input);
-      console.log('new mnemos in fetch: ', newMnemos);
-      setData(newMnemos);
+      dispatch(initMnemonics({ data: newMnemos.data, acronyms: newMnemos.acronyms }));
     } catch (e) {
       setError(e);
+      console.error('error: ', e);
     } finally {
       setIsLoading(false);
+      setError(null)
     }
   };
-
-  console.log('isloading: ', isLoading);
 
   return (
     <>
