@@ -13,6 +13,10 @@ const MnemoResponse = () => {
   const favSelected = data.find(mnemo => mnemo.status === StatusOfResponse.fav);
   const allEvaulated = data.every(mnemo => mnemo.status);
 
+  const handleSubmit = () => {
+    console.log('submit', acronyms, data)
+  }
+
   return (<>
     {
       data.length > 0 && (
@@ -41,10 +45,7 @@ const MnemoResponse = () => {
           </p>
           <Button
             variant={allEvaulated && favSelected ? 'primary' : 'disabled'}
-            onclickhandler={() => {
-              console.log('ok')
-            }
-            }
+            onclickhandler={handleSubmit}
           >
             I am ok
           </Button>

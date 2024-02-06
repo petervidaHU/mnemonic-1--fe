@@ -1,9 +1,9 @@
 'use client';
 import React, { FC, useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux';
-import { useLazyCreateMnemoQuery } from '@/store/apiSlice';
 import { initMnemonics } from '@/store/mnemonicsSlice';
 import Button from '@/components/ui/Button';
+import { getMnemos } from './use-server/fetch-mnemos';
 
 const sanitizeInput = (i: string) => {
   return i.trim()
@@ -11,7 +11,9 @@ const sanitizeInput = (i: string) => {
 
 const Input: FC = () => {
   const dispatch = useDispatch()
-  const [fetchMnemo, { data, error, isLoading }] = useLazyCreateMnemoQuery();
+  const [data, setData] = useState<any | null>(null);
+  const [error, setError] = useState<any | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [input, setInput] = useState("");
   const [holdMyHand, setHoldMyHand] = useState('');
 
@@ -31,7 +33,7 @@ const Input: FC = () => {
     }
   }
 
-  const handleSubmit = (e: { preventDefault: () => void; }) => {
+  const handleSubmit = async (e: { preventDefault: () => void; }) => {
     console.log('input: ', input)
     e.preventDefault();
     if (input.length < 3) {
@@ -42,7 +44,16 @@ const Input: FC = () => {
       setHoldMyHand('Whatta... An acronym more than 7 char long? I give up, and you should do the same! Run!!!')
       return;
     }
-    fetchMnemo(input);
+    try {
+      setIsLoading(true);
+      const newMnemos = await getMnemos(input);
+      console.log('new mnemos in fetch: ', newMnemos);
+      setData(newMnemos);
+    } catch (e) {
+      setError(e);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   console.log('isloading: ', isLoading);
@@ -68,12 +79,3 @@ const Input: FC = () => {
 }
 
 export default Input
-
-/*
- <button
-      className="mt-8 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full"
-      onClick={handleSubmit}
-    >
-      Get some idea
-    </button>
-    */
